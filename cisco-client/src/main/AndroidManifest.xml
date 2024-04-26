@@ -12,19 +12,15 @@
 
     <!-- Copy the <permission> block to your app when using the REMOTE API. Otherwise OpenConnect
         needs to be installed first -->
+<!--    no effect-->
 <!--    <permission-->
-<!--        android:name="app.openconnect.REMOTE_API"-->
+<!--        android:name="sp.openconnect.REMOTE_API"-->
 <!--        android:description="@string/permission_description"-->
 <!--        android:label="Control OpenConnect"-->
 <!--        android:permissionGroup="android.permission-group.NETWORK"-->
 <!--        android:protectionLevel="dangerous" />-->
 
-    <application
-        android:allowBackup="true"
-        android:icon="@drawable/ic_launcher"
-        android:label="@string/app"
-        android:supportsRtl="true"
-        android:name="app.openconnect.Application">
+    <application>
         <activity
             android:name=".ConnectionEditorActivity" />
         <activity
@@ -85,10 +81,10 @@
             android:uiOptions="splitActionBarWhenNarrow"
             android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+<!--                <action android:name="android.intent.action.MAIN" />-->
 
                 <category android:name="android.intent.category.BROWSABLE" />
-                <category android:name="android.intent.category.LAUNCHER" />
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
             </intent-filter>
         </activity>
 
@@ -100,7 +96,7 @@
             android:finishOnTaskLaunch="true" />
 
         <service
-            android:name="app.openconnect.core.OpenVpnService"
+            android:name="sp.openconnect.core.OpenVpnService"
             android:permission="android.permission.BIND_VPN_SERVICE"
             android:exported="true">
             <intent-filter>
@@ -110,15 +106,15 @@
 <!--
         <service
             android:name=".api.ExternalOpenVPNService"
-            android:permission="app.openconnect.REMOTE_API" >
+            android:permission="sp.openconnect.REMOTE_API" >
             <intent-filter>
-                <action android:name="app.openconnect.api.IOpenVPNAPIService" />
+                <action android:name="sp.openconnect.api.IOpenVPNAPIService" />
             </intent-filter>
         </service>
 -->
 
         <activity
-            android:permission="app.openconnect.REMOTE_API"
+            android:permission="sp.openconnect.REMOTE_API"
             android:name=".api.GrantPermissionsActivity"
             android:exported="true">
             <intent-filter>
@@ -126,7 +122,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:permission="app.openconnect.REMOTE_API"
+            android:permission="sp.openconnect.REMOTE_API"
             android:name=".api.ConfirmDialog"
             android:exported="true">
             <intent-filter>
@@ -143,7 +139,7 @@
 
         <provider
             android:name=".FileProvider"
-            android:authorities="app.openconnect.FileProvider"
+            android:authorities="sp.openconnect.FileProvider"
             android:exported="true"
             android:grantUriPermissions="true"
             tools:ignore="ExportedContentProvider" />
