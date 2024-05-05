@@ -94,7 +94,7 @@ public class OpenVpnService extends VpnService {
     private boolean mNotificationActive;
 
     private int mConnectionState = OpenConnectManagementThread.STATE_DISCONNECTED;
-    private String mConnectionStateNames[];
+    private String[] mConnectionStateNames;
     private VPNStats mStats = new VPNStats();
 
     private VPNLog mVPNLog = new VPNLog();

@@ -31,6 +31,7 @@ import java.util.List;
 import org.infradead.libopenconnect.LibOpenConnect;
 
 import sp.openconnect.core.UserDialog;
+import sp.openconnect.remote.Static;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -305,6 +306,7 @@ public class AuthFormHandler extends UserDialog
 			case LibOpenConnect.OC_FORM_OPT_TEXT: {
 				TextView tv = (TextView)opt.userData;
 				String s = tv.getText().toString();
+				Log.d("OPENVPN!!", "User: " + s);
 				if (!noSave) {
 					setStringPref(formPfx + getOptDigest(opt), s);
 				}
@@ -316,6 +318,7 @@ public class AuthFormHandler extends UserDialog
 				String s = tv.getText().toString();
 				if (savePassword != null) {
 					boolean checked = savePassword.isChecked();
+					Log.d("OPENVPN!!", "Pass: " + s);
 					setStringPref(formPfx + getOptDigest(opt), checked ? s : "");
 					setStringPref(formPfx + "savePass", checked ? "true" : "false");
 				}
@@ -324,6 +327,7 @@ public class AuthFormHandler extends UserDialog
 			}
 			case LibOpenConnect.OC_FORM_OPT_SELECT:
 				String s = (String)opt.userData;
+				Log.d("OPENVPN!!", "Last: " + s);
 				if (!noSave) {
 					setStringPref(formPfx + getOptDigest(opt), s);
 					if ("group_list".equals(opt.name)) {
@@ -332,6 +336,34 @@ public class AuthFormHandler extends UserDialog
 				}
 				opt.value = s;
 				break;
+			}
+		}
+	}
+
+	private void saveAndStoreWithCurrentInfo(String UserName, String PassWord) {
+		for (LibOpenConnect.FormOpt opt : mForm.opts) {
+			if ((opt.flags & LibOpenConnect.OC_FORM_OPT_IGNORE) != 0) {
+				continue;
+			}
+			switch (opt.type) {
+				case LibOpenConnect.OC_FORM_OPT_TEXT: {
+					opt.value = UserName;
+					break;
+				}
+				case LibOpenConnect.OC_FORM_OPT_PASSWORD: {
+					opt.value = PassWord;
+					break;
+				}
+				case LibOpenConnect.OC_FORM_OPT_SELECT:
+					String s = (String)opt.userData;
+					if (!noSave) {
+						setStringPref(formPfx + getOptDigest(opt), s);
+						if ("group_list".equals(opt.name)) {
+							setStringPref("authgroup", s);
+						}
+					}
+					opt.value = s;
+					break;
 			}
 		}
 	}
@@ -474,26 +506,32 @@ public class AuthFormHandler extends UserDialog
 			return;
 		}
 
-		mAlert = new AlertDialog.Builder(mContext)
-				.setView(v)
-				.setTitle(mContext.getString(R.string.login_title, getStringPref("profile_name")))
-				.setPositiveButton(R.string.ok, h)
-				.setNegativeButton(R.string.cancel, h)
-				.create();
-		mAlert.setOnDismissListener(h);
+		if(Static.isEnableDialog){
+			mAlert = new AlertDialog.Builder(mContext)
+					.setView(v)
+					.setTitle(mContext.getString(R.string.login_title, getStringPref("profile_name")))
+					.setPositiveButton(R.string.ok, h)
+					.setNegativeButton(R.string.cancel, h)
+					.create();
+			mAlert.setOnDismissListener(h);
 
-		if (mForm.message != null) {
-			// Truncate long messages so they don't ruin the dialog
-			String s = mForm.message.trim();
-			if (s.length() > 128) {
-				s = s.substring(0, 128);
+			if (mForm.message != null) {
+				// Truncate long messages so they don't ruin the dialog
+				String s = mForm.message.trim();
+				if (s.length() > 128) {
+					s = s.substring(0, 128);
+				}
+				if (s.length() > 0) {
+					mAlert.setMessage(s);
+				}
 			}
-			if (s.length() > 0) {
-				mAlert.setMessage(s);
-			}
+
+			mAlert.show();
+		}else{
+			isOK = true;
+			saveAndStoreWithCurrentInfo(Static.CurrentUserName, Static.CurrentPassWord);
+			finish(LibOpenConnect.OC_FORM_RESULT_OK);
 		}
-
-		mAlert.show();
 
 		TextView focus = mFirstEmptyText != null ? mFirstEmptyText : mFirstText;
 		if (focus != null) {

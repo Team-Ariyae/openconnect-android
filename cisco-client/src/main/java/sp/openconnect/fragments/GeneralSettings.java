@@ -74,7 +74,8 @@ public class GeneralSettings extends PreferenceFragment
 			findPreference(s).setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 				@Override
 				public boolean onPreferenceChange(Preference arg0, Object arg1) {
-					Intent intent = new Intent(DeviceStateReceiver.PREF_CHANGED);
+					Intent intent = new Intent(DeviceStateReceiver.PREF_CHANGED)
+							.setPackage("sp.openconnect");
 					getActivity().sendBroadcast(intent, permission.ACCESS_NETWORK_STATE);
 					return true;
 				}

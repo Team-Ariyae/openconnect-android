@@ -25,6 +25,8 @@
 package sp.openconnect.core;
 
 import sp.openconnect.R;
+import sp.openconnect.remote.Static;
+
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -59,16 +61,21 @@ public class CertWarningDialog extends UserDialog
 	@Override
 	public void onStart(Context context) {
 		super.onStart(context);
-		mAlert = new AlertDialog.Builder(context)
-			.setTitle(R.string.cert_warning_title)
-			.setMessage(context.getString(R.string.cert_warning_message,
-					mHostname, mReason, mCertSHA1))
-			.setPositiveButton(R.string.cert_warning_always_connect, this)
-			.setNeutralButton(R.string.cert_warning_just_once, this)
-			.setNegativeButton(R.string.no, this)
-			.create();
-		mAlert.setOnDismissListener(this);
-		mAlert.show();
+		if(!Static.isSkipCert){
+			mAlert = new AlertDialog.Builder(context)
+					.setTitle(R.string.cert_warning_title)
+					.setMessage(context.getString(R.string.cert_warning_message,
+							mHostname, mReason, mCertSHA1))
+					.setPositiveButton(R.string.cert_warning_always_connect, this)
+					.setNeutralButton(R.string.cert_warning_just_once, this)
+					.setNegativeButton(R.string.no, this)
+					.create();
+			mAlert.setOnDismissListener(this);
+			mAlert.show();
+		}else{
+			mAccept = RESULT_ALWAYS;
+			finish(mAccept);
+		}
 	}
 
 	@Override

@@ -87,9 +87,18 @@ public abstract class CiscoMainActivity extends AppCompatActivity {
             }
         };
 
+        Static.isEnableDialog = isEnableDialog();
+        Static.CurrentPassWord = CurrentPassWord();
+        Static.CurrentUserName = CurrentUserName();
+        Static.isSkipCert = skipCertWarning();
+
         super.onResume();
     }
 
+    protected abstract String CurrentUserName();
+    protected abstract String CurrentPassWord();
+    protected abstract boolean isEnableDialog();
     protected abstract void CiscoUpdateUI(OpenVpnService service);
+    protected abstract boolean skipCertWarning();
 
 }
