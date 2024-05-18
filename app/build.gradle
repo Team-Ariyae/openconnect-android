@@ -2,13 +2,13 @@ apply plugin: 'com.android.application'
 
 android {
     namespace 'app.openconnect'
-    compileSdk 34
+    compileSdk 33
     ndkVersion '25.1.8937393'
 
     defaultConfig {
         applicationId "app.openconnect"
         minSdkVersion 19
-        targetSdkVersion 34
+        targetSdkVersion 33
 
         versionCode 1122
         versionName '1.11.2'
