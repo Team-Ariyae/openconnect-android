@@ -99,7 +99,7 @@ public class AssetExtractor {
 //            return "x86";
 //        }
         else {
-            return "armeabi";
+            return "armeabi-v7a";
         }
     }
 
