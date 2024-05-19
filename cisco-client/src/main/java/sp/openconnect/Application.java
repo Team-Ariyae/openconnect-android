@@ -24,6 +24,7 @@
 package sp.openconnect;
 
 import android.os.Build;
+import android.util.Log;
 import android.widget.Toast;
 
 import sp.openconnect.core.FragCache;
@@ -35,11 +36,18 @@ public class Application extends android.app.Application {
 	public void onCreate() {
 		super.onCreate();
 
-		checkProcessorModel();
-		System.loadLibrary("openconnect");
-		System.loadLibrary("stoken");
-		ProfileManager.init(getApplicationContext());
-		FragCache.init();
+		try {
+			checkProcessorModel();
+			try {
+				System.loadLibrary("openconnect");
+				System.loadLibrary("stoken");
+			} catch (Exception ignore) {
+			}
+			ProfileManager.init(getApplicationContext());
+			FragCache.init();
+		}catch (Exception e){
+			Log.d("OPENCONNECT err", e.toString());
+		}
 	}
 
 	private void checkProcessorModel() {
