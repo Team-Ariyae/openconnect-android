@@ -38,11 +38,6 @@ public class Application extends android.app.Application {
 
 		try {
 			checkProcessorModel();
-			try {
-				System.loadLibrary("openconnect");
-				System.loadLibrary("stoken");
-			} catch (Exception ignore) {
-			}
 			ProfileManager.init(getApplicationContext());
 			FragCache.init();
 		}catch (Exception e){
@@ -57,6 +52,9 @@ public class Application extends android.app.Application {
 			if (processorModel.equals("x86") || processorModel.equals("x86_64")) {
 				Toast.makeText(this, "هشدار! این مدل از پردازنده برای اتصال به سیسکو پشتیبانی نمیشود.",
 						Toast.LENGTH_LONG).show();
+			}else{
+				System.loadLibrary("openconnect");
+				System.loadLibrary("stoken");
 			}
 		}
 	}
